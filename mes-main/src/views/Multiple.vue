@@ -1,11 +1,6 @@
 <template>
   <div style="height: 100%; width: 100%">
-    <WujieVue
-      class="item"
-      name="react17"
-      :url="react17Url"
-      :sync="true"
-    ></WujieVue>
+    <WujieVue class="item" name="react17" :url="react17Url" :sync="true"></WujieVue>
     <WujieVue class="item" name="vue2" :url="vue2Url" :sync="true"></WujieVue>
     <WujieVue class="item" name="vue3" :url="vue3Url" :sync="true"></WujieVue>
     <WujieVue class="item" name="vite" :url="vite" :sync="true"></WujieVue>
@@ -18,18 +13,18 @@ import hostMap from '../hostMap';
 export default {
   data() {
     return {
-      react17Url: hostMap("//localhost:7100/"),
-      vue2Url: hostMap("//localhost:7200/"),
-      vue3Url: hostMap("//localhost:7300/"),
-      vite: hostMap("//localhost:7500/"),
-    };
+      react17Url: hostMap('//localhost:7100/'),
+      vue2Url: hostMap('//localhost:7200/'),
+      vue3Url: hostMap('//localhost:7300/'),
+      vite: hostMap('//localhost:7500/')
+    }
   },
   methods: {
     jump(name) {
-      this.$router.push({ name });
-    },
-  },
-};
+      this.$router.push({ name })
+    }
+  }
+}
 </script>
 
 <style scoped>

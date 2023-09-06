@@ -21,14 +21,13 @@ bus.$on('click', (msg: string) => window.alert(msg))
 
 // 在 xxx-sub 路由下子应用将激活路由同步给主应用，主应用跳转对应路由高亮菜单栏
 bus.$on('sub-route-change', (name: string, path: string) => {
-  const mainName = `${name}-sub`
-  const mainPath = `/${name}-sub${path}`
-  const currentName = router.currentRoute.value.name
-  const currentPath = router.currentRoute.value.path
+  const mainPath = `/${name}${path}`
 
-  if (mainName === currentName && mainPath !== currentPath) {
-    router.push({ path: mainPath })
+  if (location.pathname === mainPath) {
+    return
   }
+  console.log('main:sub-route-change: ', location.pathname, mainPath)
+  router.push({ path: mainPath })
 })
 
 const props = {
@@ -52,7 +51,7 @@ setupApp({
 })
 
 setupApp({
-  name: 'vue2',
+  name: 'v2-system',
   url: hostMap('//localhost:7200/'),
   exec: true,
   props,
@@ -61,7 +60,7 @@ setupApp({
 })
 
 setupApp({
-  name: 'vue3',
+  name: 'v-user',
   url: hostMap('//localhost:7300/'),
   exec: true,
   alive: true,
@@ -94,12 +93,12 @@ if (window.localStorage.getItem('preload') !== 'false') {
     url: ''
   })
   preloadApp({
-    name: 'vue2',
+    name: 'v2-system',
     url: ''
   })
   if (window.Proxy) {
     preloadApp({
-      name: 'vue3',
+      name: 'v-user',
       url: ''
     })
     preloadApp({
@@ -108,6 +107,12 @@ if (window.localStorage.getItem('preload') !== 'false') {
     })
   }
 }
+
+declare let window: any
+
+bus.$on('collect-sub-app-routes', (subAppRoutes: any) => {
+  window.__WUJIE_ROUTER__ = [...(window.__WUJIE_ROUTER__ || []), ...(subAppRoutes || [])]
+})
 
 const app = createApp(App)
 

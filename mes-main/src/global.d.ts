@@ -5,3 +5,5 @@ declare module '*.vue' {
 }
 
 declare let process: any
+
+declare let window: any

@@ -4,7 +4,10 @@ import 'antd/es/modal/style/css';
 import 'antd/es/select/style/css';
 import 'antd/es/popover/style/css';
 
-import { useEffect } from 'react';
+import {
+  useEffect,
+  useRef,
+} from 'react';
 
 import Button from 'antd/es/button';
 import Tag from 'antd/es/tag';
@@ -66,7 +69,14 @@ function Nav() {
 
   // 在 react17-sub 路由下主动告知主应用路由跳转，主应用也跳到相应路由高亮菜单栏
   const location = useLocation();
+
+  const firstUpdate = useRef(false);
   useEffect(() => {
+    if (!firstUpdate.current) {
+      firstUpdate.current = true;
+      return;
+    }
+    if (!location.pathname.includes("react17")) return;
     window.$wujie?.bus.$emit("sub-route-change", "react17", location.pathname);
   }, [location]);
 

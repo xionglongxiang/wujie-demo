@@ -1,8 +1,13 @@
-import { createRouter, createWebHistory } from "vue-router";
-import Home from "../views/Home.vue";
+import {
+  createRouter,
+  createWebHistory,
+} from 'vue-router';
+
+import Home from '../views/Home.vue';
+
 const basename = process.env.NODE_ENV === "production" ? "/demo-vue3/" : "";
 
-const routes = [
+export const routes = [
   {
     path: "/",
     redirect: "/home",
@@ -10,6 +15,9 @@ const routes = [
   {
     path: "/home",
     component: Home,
+    meta: {
+      title: "首页",
+    },
   },
   {
     path: "/dialog",
@@ -17,7 +25,11 @@ const routes = [
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ "../views/Dialog.vue"),
+    component: () =>
+      import(/* webpackChunkName: "about" */ "../views/Dialog.vue"),
+    meta: {
+      title: "弹窗",
+    },
   },
   {
     path: "/location",
@@ -25,7 +37,11 @@ const routes = [
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ "../views/Location.vue"),
+    component: () =>
+      import(/* webpackChunkName: "about" */ "../views/Location.vue"),
+    meta: {
+      title: "路由",
+    },
   },
   {
     path: "/state",
@@ -33,7 +49,11 @@ const routes = [
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ "../views/State.vue"),
+    component: () =>
+      import(/* webpackChunkName: "about" */ "../views/State.vue"),
+    meta: {
+      title: "状态",
+    },
   },
   {
     path: "/contact",
@@ -41,13 +61,24 @@ const routes = [
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ "../views/Communication.vue"),
+    component: () =>
+      import(/* webpackChunkName: "about" */ "../views/Communication.vue"),
+    meta: {
+      title: "通信",
+    },
   },
 ];
 
 const router = createRouter({
   history: createWebHistory(basename),
   routes,
+});
+
+router.beforeEach((to, from, next) => {
+  console.log("==vue3:router:to", to.path, from.path);
+
+  window.$wujie?.bus.$emit("sub-route-change", "v-user", to.path);
+  next();
 });
 
 export default router;
