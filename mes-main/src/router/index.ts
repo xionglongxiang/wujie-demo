@@ -134,7 +134,7 @@ router.beforeEach((to, from, next) => {
         (item: any) => item.meta.app === toApp && item.path === toPage
       )
 
-      console.log(selected)
+      console.log(selected, to, from)
 
       if (!selected) return
 
