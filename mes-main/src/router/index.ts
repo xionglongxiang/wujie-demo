@@ -20,15 +20,6 @@ declare let window: any
 
 const routes = [
   {
-    path: '/home',
-    name: 'home',
-    meta: {
-      app: 'main-app',
-      title: '主应用首页'
-    },
-    component: Home
-  },
-  {
     path: '/react17',
     name: 'react17',
     component: React17,
@@ -36,6 +27,15 @@ const routes = [
       app: 'main-app',
       title: 'react17-首页'
     }
+  },
+  {
+    path: '/home',
+    name: 'home',
+    meta: {
+      app: 'main-app',
+      title: '主应用首页'
+    },
+    component: Home
   },
   {
     path: '/react17-sub/:path',
@@ -123,11 +123,17 @@ const router: any = createRouter({
 
 router.beforeEach((to, from, next) => {
   let tryTimes = 3
+
   function openTab() {
     const toApp = to.fullPath.split('/')[1]
     const toPage = `/${to.fullPath.split('/')[2] || ''}`
 
-    if (tryTimes > 0 && window.__WUJIE_ROUTER__) {
+    if (
+      tryTimes > 0 &&
+      window.__WUJIE_ROUTER__.some((item: any) => {
+        return item.meta.app === to.meta.app
+      })
+    ) {
       tryTimes = 0
       const selected = window.__WUJIE_ROUTER__.find(
         (item: any) => item.meta.app === toApp && item.path === toPage
@@ -147,9 +153,14 @@ router.beforeEach((to, from, next) => {
     } else {
       if (tryTimes === 0) return
       tryTimes--
-      setTimeout(() => {
-        openTab()
-      }, 2)
+      console.log('%ctry open tab', 'color: grey;')
+
+      setTimeout(
+        () => {
+          openTab()
+        },
+        3500 - tryTimes * 1000
+      )
     }
   }
   const tab = useTabStore()

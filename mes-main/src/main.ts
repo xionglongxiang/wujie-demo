@@ -21,16 +21,16 @@ bus.$on('click', (msg: string) => window.alert(msg))
 
 // 在 xxx-sub 路由下子应用将激活路由同步给主应用，主应用跳转对应路由高亮菜单栏
 bus.$on('sub-route-change', (name: string, path: string) => {
-  const mainPath = `/${name}${path}`
-
-  console.log('%cmainapp sub-route-change', 'color: green;font-size: 20px;font-weight: bold;')
-
-  console.log(mainPath, location.pathname)
+  let mainPath = `/${name}`
+  if (path) mainPath += `${path}`
 
   if (location.pathname === mainPath) {
     return
   }
-  console.log('main:sub-route-change: from: ', location.pathname, 'to: ', mainPath)
+
+  console.log('%cmainapp sub-route-change', 'color: green;font-size: 20px;font-weight: bold;')
+  console.log(mainPath, location.pathname)
+  console.log('%cmain:sub-route-change: from: ', 'color: red', location.pathname, 'to: ', mainPath)
   router.push({ path: mainPath })
 })
 
@@ -114,8 +114,11 @@ if (window.localStorage.getItem('preload') !== 'false') {
 
 declare let window: any
 
+if (window.__WUJIE_ROUTER__ == undefined) {
+  window.__WUJIE_ROUTER__ = []
+}
 bus.$on('collect-sub-app-routes', (subAppRoutes: any) => {
-  window.__WUJIE_ROUTER__ = [...(window.__WUJIE_ROUTER__ || []), ...(subAppRoutes || [])]
+  window.__WUJIE_ROUTER__ = [...window.__WUJIE_ROUTER__, ...(subAppRoutes || [])]
 })
 
 const app = createApp(App)

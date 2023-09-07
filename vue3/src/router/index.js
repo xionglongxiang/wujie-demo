@@ -9,11 +9,8 @@ const basename = process.env.NODE_ENV === "production" ? "/demo-vue3/" : "";
 
 export const routes = [
   {
-    path: "/",
-    redirect: "/home",
-  },
-  {
     path: "/home",
+    name: "Home",
     component: Home,
     meta: {
       title: "首页",
@@ -69,10 +66,8 @@ export const routes = [
   },
   {
     path: "/*",
-    name: "Default",
-    meta: {
-      title: "通信",
-    },
+    name: "Root",
+    redirect: "/home",
   },
 ];
 
